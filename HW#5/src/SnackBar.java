@@ -33,6 +33,9 @@ public class SnackBar extends JFrame {
 	private JTextField textField_6;
 
 	public ClientManager clientManager;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
 
 	/**
 	 * Launch the application.
@@ -61,6 +64,45 @@ public class SnackBar extends JFrame {
 
 		setTab1(tabbedPane);
 		setTab2(tabbedPane);
+		
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("매출조회", null, panel, null);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("날짜");
+		lblNewLabel_1.setBounds(39, 26, 62, 18);
+		panel.add(lblNewLabel_1);
+		
+		textField_7 = new JTextField();
+		textField_7.setBounds(80, 23, 150,24);
+		panel.add(textField_7);
+		textField_7.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("~");
+		lblNewLabel_2.setBounds(243, 26, 21, 18);
+		panel.add(lblNewLabel_2);
+		
+		textField_8 = new JTextField();
+		textField_8.setBounds(267, 23, 150, 24);
+		panel.add(textField_8);
+		textField_8.setColumns(10);
+		
+		JLabel lblNewLabel_3 = new JLabel("까지");
+		lblNewLabel_3.setBounds(428, 26, 29, 18);
+		panel.add(lblNewLabel_3);
+		
+		textField_9 = new JTextField();
+		textField_9.setBounds(39, 56, 456, 208);
+		panel.add(textField_9);
+		textField_9.setColumns(10);
+		
+		JButton btnNewButton_1 = new JButton("조회");
+		btnNewButton_1.setBounds(49, 276, 189, 27);
+		panel.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("취소");
+		btnNewButton_2.setBounds(290, 276, 194, 27);
+		panel.add(btnNewButton_2);
 
 	}
 
