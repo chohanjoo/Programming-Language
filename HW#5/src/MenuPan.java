@@ -16,4 +16,6 @@ public class MenuPan {
 		menu.put("Æ¢±è", 5000);
 		
 	}
+	
+	
 }

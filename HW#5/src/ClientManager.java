@@ -18,7 +18,7 @@ public class ClientManager {
 	}
 
 	public Client searchClient(String number) {
-
+		readFile();
 		if (clientList.containsKey(number))
 			return clientList.get(number);
 
@@ -39,7 +39,7 @@ public class ClientManager {
 
 	}
 
-	public void inputFile() {
+	public synchronized void inputFile() {
 		try {
 			File file = new File("C:\\Users\\한주\\eclipse-workspace\\pl#4\\custom.txt");
 			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
@@ -67,7 +67,7 @@ public class ClientManager {
 		}
 	}
 
-	public void readFile() {
+	public synchronized void readFile() {
 		try {
 			File file = new File("C:\\Users\\한주\\eclipse-workspace\\pl#4\\custom.txt");
 			FileReader filereader = new FileReader(file);

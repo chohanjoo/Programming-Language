@@ -18,8 +18,12 @@ import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import javax.swing.JTextArea;
 
 public class SnackBar extends JFrame {
 
@@ -35,7 +39,8 @@ public class SnackBar extends JFrame {
 	public ClientManager clientManager;
 	private JTextField textField_7;
 	private JTextField textField_8;
-	private JTextField textField_9;
+	
+	int total_coupon=0;
 
 	/**
 	 * Launch the application.
@@ -91,18 +96,54 @@ public class SnackBar extends JFrame {
 		lblNewLabel_3.setBounds(428, 26, 29, 18);
 		panel.add(lblNewLabel_3);
 		
-		textField_9 = new JTextField();
-		textField_9.setBounds(39, 56, 456, 208);
-		panel.add(textField_9);
-		textField_9.setColumns(10);
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(39, 56, 456, 208);
+		panel.add(textArea);
 		
 		JButton btnNewButton_1 = new JButton("조회");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String start_date = textField_7.getText();
+				String end_date = textField_8.getText();
+				CheckSales sales = new CheckSales(start_date, end_date);
+				HashMap<String , Integer> sales_volume = sales.getSalesVolume();
+				MenuPan menus = new MenuPan();
+				
+				
+				total_coupon = sales.coupons;
+				textArea.setText("");
+				textArea.append("메뉴		갯수		매출금액\n");
+				textArea.append("=========================================================\n");
+				Set<String> keys = menus.menu.keySet();
+				int total = 0;
+					for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
+			            String key = (String) iterator.next();
+			            int price = menus.menu.get(key);
+			            int count = sales_volume.get(key);
+			            String str = String.format("%,d", count*price);
+			            total += count*price;
+						textArea.append(key + "\t\t" +count + "\t\t" + str + "\n");
+			}
+					textArea.append("쿠폰\t\t\t\t"+total_coupon +"\n");
+					textArea.append("=========================================================\n");
+					 String str = String.format("%,d", total);
+					textArea.append("매출합계\t\t\t\t" + str);
+
+			}
+		});
 		btnNewButton_1.setBounds(49, 276, 189, 27);
 		panel.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("취소");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				textArea.setText("");
+			}
+		});
 		btnNewButton_2.setBounds(290, 276, 194, 27);
 		panel.add(btnNewButton_2);
+		
+		
 
 	}
 
@@ -146,7 +187,7 @@ public class SnackBar extends JFrame {
 
 		JButton btnNewButton = new JButton("\uC8FC\uBB38");
 		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void  actionPerformed(ActionEvent arg0) {
 				
 				Thread thread = new Thread(new Runnable() {
 					
@@ -156,6 +197,8 @@ public class SnackBar extends JFrame {
 						String date = textField_4.getText();
 						String client_number = textField_5.getText();
 						String menu = comboBox.getSelectedItem().toString();
+						clientManager.readFile();
+
 
 						try {
 							if (date.compareTo("") == 0 || client_number.compareTo("") == 0)
@@ -168,6 +211,7 @@ public class SnackBar extends JFrame {
 									client.setCountOfOrder(0);
 									JOptionPane.showMessageDialog(null, client_number + "번 고객님\n무료쿠폰이 배송되었습니다.");
 									client.coupon++;
+									total_coupon++;
 								}
 							} else {
 								Client client = null;
@@ -207,6 +251,7 @@ public class SnackBar extends JFrame {
 						String client_number = textField_5.getText();
 						String menu = comboBox.getSelectedItem().toString();
 						Boolean find = false;
+						clientManager.readFile();
 
 						try {
 							
@@ -223,6 +268,7 @@ public class SnackBar extends JFrame {
 											--client.countOfOrder;
 										else {
 											--client.coupon;
+											total_coupon--;
 											client.setCountOfOrder(2);
 										}
 										find = true;
@@ -314,7 +360,6 @@ public class SnackBar extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				Thread thread = new Thread(new Runnable() {
-
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
